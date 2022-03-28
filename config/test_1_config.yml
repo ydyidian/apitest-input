@@ -1,0 +1,189 @@
+mongodb:
+  nhot:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nhot
+
+  nwsxc:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nwsxc
+
+  search:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nwsxc
+
+  nzero:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nzero
+
+  nnone:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nnone
+
+  ntwo:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: ntwo
+
+  nthree:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nthree
+
+  nfour:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nfour
+
+  nfive:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nfives
+
+  nsix:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nsix
+
+  nseven:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nseven
+
+  neight:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: neight
+
+  nnine:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nnine
+
+  message:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: nwsxc
+
+  db0:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: db0
+
+  db1:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: db1
+
+  db2:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: db2
+
+  db3:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: db3
+
+  db4:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: db4
+
+  db5:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: db5
+
+  db6:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: db6
+
+  db7:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: db7
+
+  db8:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: db8
+
+  db9:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: db9
+
+  wsxcsearch:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: wsxcsearch
+
+mysql:
+  wg_tongs_test:
+    host: 10.0.1.19
+    port: 3306
+    user: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: wg_tongs_test
+
+es:
+  host: 10.0.1.4
+  port: 9200
+  user: aaa
+  password: aaa

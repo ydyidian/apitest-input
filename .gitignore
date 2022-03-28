@@ -1,0 +1,12 @@
+logs/
+/report/*.html
+pytest_report/
+.pytest_cache/
+__pycache__/
+*.pyc
+*/__init__.py
+.idea/
+.vscode/
+venv/
+.DS_Store
+config/config.ini

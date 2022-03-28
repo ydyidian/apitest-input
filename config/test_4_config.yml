@@ -1,0 +1,189 @@
+mongodb:
+  hot:
+    host: 10.0.2.3
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxc
+
+  nwsxc:
+    host: 10.0.1.18
+    port: 27017
+    username: wegooooo_pretest
+    password: t!2G%I@7V%d*35!
+    database: nwsxc
+
+  search:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  nzero:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  none:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  ntwo:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  nthree:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  nfour:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  nfive:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  nsix:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  nseven:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  neight:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  nnine:
+    host: 10.0.2.4
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  message:
+    host: 10.0.2.11
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+  db0:
+    host: 10.0.2.13
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: nwsxc
+
+  db1:
+    host: 10.0.2.13
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: nwsxc
+
+  db2:
+    host: 10.0.2.13
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: nwsxc
+
+  db3:
+    host: 10.0.2.13
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: nwsxc
+
+  db4:
+    host: 10.0.2.13
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: nwsxc
+
+  db5:
+    host: 10.0.2.13
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: nwsxc
+
+  db6:
+    host: 10.0.2.13
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: nwsxc
+
+  db7:
+    host: 10.0.2.13
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: nwsxc
+
+  db8:
+    host: 10.0.2.13
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: nwsxc
+
+  db9:
+    host: 10.0.2.13
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: nwsxc
+
+  wsxcsearch:
+    host: 10.0.2.11
+    port: 27017
+    username: lixiandong
+    password: E5k9Ctr1
+    database: wsxcsearch
+
+mysql:
+  wg_tongs_test:
+    host: 10.0.1.12
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_tongs
+
+es:
+  host: 10.1.20.15
+  port: 9200
+  user: aaa
+  password: aaa

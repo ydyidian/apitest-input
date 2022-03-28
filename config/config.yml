@@ -1,0 +1,283 @@
+domain: https://3a.wegoab.com
+
+normalUserInfo:
+  self:
+    username: "13510547953"
+    password: "19850406"
+  parent:
+    username: "13066884226"
+    password: wego2020
+  parent2:
+    username: "17169661596"
+    password: wego2020 
+
+
+
+mongodb:
+  nhot:
+    host: 10.0.1.16
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxc
+
+  nwsxc:
+    host: 10.0.1.16
+    port: 27017
+    username: wegooooo_pretest
+    password: t!2G%I@7V%d*35!
+    database: wsxc
+
+  search:
+    host: 10.0.1.16
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  nzero:
+    host: 10.0.2.9
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  nnone:
+    host: 10.0.2.9
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  ntwo:
+    host: 10.0.2.9
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  nthree:
+    host: 10.0.2.9
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  nfour:
+    host: 10.0.2.9
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  nfive:
+    host: 10.0.2.9
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  nsix:
+    host: 10.0.2.9
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  nseven:
+    host: 10.0.2.9
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  neight:
+    host: 10.0.2.9
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  nnine:
+    host: 10.0.2.9
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+  message:
+    host: 10.0.1.16
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxc
+
+  db0:
+    host: 10.0.2.14
+    port: 27017
+    username: root
+    password: truedian#123
+    database: db0
+
+  db1:
+    host: 10.0.2.14
+    port: 27017
+    username: root
+    password: truedian#123
+    database: db1
+
+  db2:
+    host: 10.0.2.14
+    port: 27017
+    username: root
+    password: truedian#123
+    database: db2
+
+  db3:
+    host: 10.0.2.14
+    port: 27017
+    username: root
+    password: truedian#123
+    database: db3
+
+  db4:
+    host: 10.0.2.14
+    port: 27017
+    username: root
+    password: truedian#123
+    database: db4
+
+  db5:
+    host: 10.0.2.14
+    port: 27017
+    username: root
+    password: truedian#123
+    database: db5
+
+  db6:
+    host: 10.0.2.14
+    port: 27017
+    username: root
+    password: truedian#123
+    database: db6
+
+  db7:
+    host: 10.0.2.14
+    port: 27017
+    username: root
+    password: truedian#123
+    database: db7
+
+  db8:
+    host: 10.0.2.14
+    port: 27017
+    username: root
+    password: truedian#123
+    database: db8
+
+  db9:
+    host: 10.0.2.14
+    port: 27017
+    username: root
+    password: truedian#123
+    database: db9
+
+
+  wsxcsearch:
+    host: 10.0.2.6
+    port: 27017
+    username: root
+    password: truedian#123
+    database: wsxcsearch
+
+mysql:
+  wg_tongs_test:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_tongs
+  wg_commodity:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity
+  wg_commodity_shard:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_001
+  wg_circle:
+    host: 10.0.1.19
+    port: 3306
+    user: wegooooo_pretest
+    password: S%5K%t*9j*H#1h*
+    database: wg_circle
+  wg_commodity_sharding_000:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_000
+  wg_commodity_sharding_001:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_001
+  wg_commodity_sharding_002:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_002
+  wg_commodity_sharding_003:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_003
+  wg_commodity_sharding_004:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_004
+  wg_commodity_sharding_005:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_005
+  wg_commodity_sharding_006:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_006
+  wg_commodity_sharding_007:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_007
+  wg_commodity_sharding_008:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_008
+  wg_commodity_sharding_009:
+    host: 10.0.1.14
+    port: 3306
+    user: root
+    password: truedian#123
+    database: wg_commodity_sharding_009
+
+es:
+  host: 10.1.20.3
+  port: 9200
+  user: aaa
+  password: aaa
