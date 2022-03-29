@@ -46,25 +46,9 @@ import pytest
 import yaml
 from yaml.parser import ParserError
 
-from common.settings import Settings
 
-
-expression_pattern = "{%(?P<pre>\s)?(?P<expression>\w+(\.\w+)*\(.+?\))(?(pre)\s)%}"
+expression_pattern = "{%(?P<pre>\s)?(?P<expression>.+)(?(pre)\s)%}"
 variable_pattern = "{{(?P<pre>\s)?(?P<variable>\w+(\.\w+)*)(?(pre)\s)}}"
-
-
-def get_conn_mapping(db_type):
-    """
-    获取数据库连接信息
-    :param db_type: 数据库类型 mongodb | mysql | es
-    :return: 数据库连接信息字典
-    """
-    if db_type not in ("mongodb", "mysql", "es"):
-        raise ValueError("输入的数据库类型有误，请检查！")
-
-    with open(Settings.CONFIG_PATH) as f:
-        conf = yaml.load(f, Loader=yaml.FullLoader)
-        return conf[db_type]
 
 
 def get_yaml_data(file_path):
@@ -108,9 +92,12 @@ class YamlParser(object):
 
         def fill_expression(match):
             expression = match.group("expression")
+            local_modules = set()
             for i in re.findall("(\w+)(\.\w+)+\(", expression):
                 module_name = i[0]
-                locals()[module_name] = __import__(module_name)
+                if module_name not in local_modules:
+                    locals()[module_name] = __import__(module_name)
+                    local_modules.add(module_name)
             return str(eval(expression))
 
         # 填充变量

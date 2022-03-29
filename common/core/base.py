@@ -14,7 +14,9 @@
 import json
 from enum import Enum
 from json import JSONDecodeError
+from typing import Dict
 from urllib import parse
+import urllib3
 
 import requests
 
@@ -22,9 +24,9 @@ from common.logging.logger import Logger
 from common.settings import Settings
 from common.support.yaml_parse import get_yaml_data
 
-logger = Logger(logger="BaseAPI")
 
-config = get_yaml_data(Settings.CONFIG_PATH)
+urllib3.disable_warnings()
+logger = Logger(logger="BaseAPI")
 
 
 class RequestContentType(Enum):
@@ -36,22 +38,34 @@ class RequestContentType(Enum):
 
 class Request(object):
     @staticmethod
-    def get_headers(token, client_type, content_type=None):
+    def get_headers(token: str, client_type: str, content_type: str = None):
         """
         获取请求头部信息
         """
         headers = {
             "Accept": "application/json,text/plain, */*",
-            "Cookie": f"test_token={token}",
-            "client_type": client_type,
+            # "Cookie": f"token={token}",
+            "token": token,
+            ("wego-" if client_type == "ios" else "") + "channel": f"{client_type}_input",
         }
         content_type_obj = RequestContentType.__members__.get(content_type)
         if content_type_obj:
             headers.update({"Content-Type": content_type_obj.value})
         return headers
 
-    @staticmethod
-    def request(method, url, *, session=None, **kwargs):
+    @classmethod
+    def request(
+        cls,
+        method: str,
+        url: str,
+        *,
+        session: requests.Session = None,
+        expect_status_code: int = 200,
+        expect_errcode: int = 0,
+        expect_msg: str = None,
+        validate_type: str = "equal",
+        **kwargs,
+    ):
         """
         获取请求响应
         :param method: 请求方式
@@ -64,16 +78,48 @@ class Request(object):
             resp = session.request(method, url, **kwargs)
         else:
             resp = requests.request(method, url, **kwargs)
-        try:
-            ret = resp.json()
-            is_json = True
-        except JSONDecodeError:
-            ret = resp.content.decode()
-            is_json = False
+        is_json, ret = cls.validate_response(resp, expect_status_code, expect_errcode, expect_msg, validate_type)
         return is_json, ret
 
+    def validate_response(response, expect_status_code, expect_errcode, expect_msg, validate_type):
+        """
+        校验响应信息
+        :param response: 响应对象
+        :param expect_status_code: 预期接口返回状态码
+        :param expect_errcode: 预期接口返回错误码
+        :param expect_msg: 预期错误信息
+        :param validate_type: 错误信息校验类型 「equal | contains」
+        """
+        assert (
+            response.status_code == expect_status_code
+        ), f"接口响应状态码与预期不符：预期「{expect_status_code}」，实际状态码「{response.status_code}」"
+        try:
+            resp_data = response.json()
+            is_json = True
+        except JSONDecodeError:
+            resp_data = response.content.decode()
+            is_json = False
+        if is_json:
+            resp_data = response.json()
+            if expect_errcode is not None:
+                assert (
+                    resp_data["errcode"] == expect_errcode
+                ), f"接口报文错误码与预期不符：预期「{expect_errcode}」，实际「{resp_data['errcode']}」"
+            if expect_msg is not None:
+                if validate_type == "contains":
+                    assert (
+                        expect_msg in resp_data["errmsg"]
+                    ), f"接口报文错误信息与预期不符：预期「{expect_msg}」，实际「{resp_data['errmsg']}」"
+                elif expect_msg is not None and validate_type == "equal":
+                    assert (
+                        resp_data["errmsg"] == expect_msg
+                    ), f"接口报文错误信息与预期不符：预期「{expect_msg}」，实际「{resp_data['errmsg']}」"
+                elif validate_type not in ("equal", "contains"):
+                    raise ValueError("请传入正确的错误提示校验类型：equal｜contains")
+        return is_json, resp_data
+
     @staticmethod
-    def urlencode(query, doseq=False, safe="", encoding=None, errors=None, quote_via=parse.quote):
+    def urlencode(query: Dict, doseq=False, safe="", encoding=None, errors=None, quote_via=parse.quote):
         """
         修改urlencode，以适应True -> true, None -> null
         :param query: query参数，可传入字典或者列表元组类型的数据
@@ -108,7 +154,7 @@ class BaseAPI(object):
         username: str = None,
         password: str = None,
         client_type: str = "android",
-        domain: str = config["domain"],
+        domain: str = Settings.DOMAIN,
         role: str = None,
     ):
         """
@@ -121,7 +167,10 @@ class BaseAPI(object):
         """
         # 兼容之前的三个用户登录
         if role in ("self", "parent", "parent2"):
-            username, password = config["normalUserInfo"][role]["username"], config["normalUserInfo"][role]["password"]
+            username, password = (
+                Settings.CONFIG["normalUserInfo"][role]["username"],
+                Settings.CONFIG["normalUserInfo"][role]["password"],
+            )
         if client_type not in ("android", "ios", "net"):
             raise ValueError("登录设备类型范围：android | ios | net ")
         self.client_type = client_type
@@ -150,6 +199,7 @@ class BaseAPI(object):
         else:
             url = f"{self.domain}/album/api/v1/user/loginByCellphone"
             data = {"phone_number": username, "password": password, "ticket": ticket}
+            # is_json, resp = Request.request("post", url, json=data, verify=False)
             is_json, resp = Request.request("post", url, json=data, verify=False)
             if is_json:
                 album_id = resp["result"]["albumId"]
@@ -192,8 +242,8 @@ class BaseAPI(object):
         url = f"{self.domain}{uri}"
         headers = Request.get_headers(self.token, self.client_type, content_type)
         params_str = ("\n\t" + f"param参数：{params}" + "\n") if params else ""
-        data_str = ("\n\t" + f"data参数：{data}" + "\n") if params else ""
-        json_str = ("\n\t" + f"body参数：{json}" + "\n") if params else ""
+        data_str = ("\n\t" + f"data参数：{data}" + "\n") if data else ""
+        json_str = ("\n\t" + f"body参数：{json}" + "\n") if json else ""
         logger.info(f"[POST] {url}" + "\n" + f"请求头部信息：{headers}" + "\n" + f"请求报文：{params_str}{data_str}{json_str}")
         _, response = Request.request(
             "get",
@@ -205,9 +255,12 @@ class BaseAPI(object):
             files=file,
             verify=False,
             timeout=30,
+            expect_status_code=expect_status_code,
+            expect_errcode=expect_errcode,
+            expect_msg=expect_msg,
+            validate_type=validate_type,
         )
-        logger.info(f'接口返回信息：{response.content.decode("utf-8")}')
-        self.validate_response(response, expect_status_code, expect_errcode, expect_msg, validate_type)
+        logger.info(f"接口返回信息：{response}")
         return response
 
     def post(
@@ -241,8 +294,8 @@ class BaseAPI(object):
         url = f"{self.domain}{uri}"
         headers = Request.get_headers(self.token, self.client_type, content_type)
         params_str = ("\n\t" + f"param参数：{params}" + "\n") if params else ""
-        data_str = ("\n\t" + f"data参数：{data}" + "\n") if params else ""
-        json_str = ("\n\t" + f"body参数：{json}" + "\n") if params else ""
+        data_str = ("\n\t" + f"data参数：{data}" + "\n") if data else ""
+        json_str = ("\n\t" + f"body参数：{json}" + "\n") if json else ""
         logger.info(f"[POST] {url}" + "\n" + f"请求头部信息：{headers}" + "\n" + f"请求报文：{params_str}{data_str}{json_str}")
         _, response = Request.request(
             "post",
@@ -254,10 +307,12 @@ class BaseAPI(object):
             files=file,
             verify=False,
             timeout=30,
+            expect_status_code=expect_status_code,
+            expect_errcode=expect_errcode,
+            expect_msg=expect_msg,
+            validate_type=validate_type,
         )
-        logger.info(f'接口返回信息：{response.content.decode("utf-8")}')
-        self.validate_response(response, expect_status_code, expect_errcode, expect_msg, validate_type)
-
+        logger.info(f"接口返回信息：{response}")
         return response
 
     def put(
@@ -291,8 +346,8 @@ class BaseAPI(object):
         url = f"{self.domain}{uri}"
         headers = Request.get_headers(self.token, self.client_type, content_type)
         params_str = ("\n\t" + f"param参数：{params}" + "\n") if params else ""
-        data_str = ("\n\t" + f"data参数：{data}" + "\n") if params else ""
-        json_str = ("\n\t" + f"body参数：{json}" + "\n") if params else ""
+        data_str = ("\n\t" + f"data参数：{data}" + "\n") if data else ""
+        json_str = ("\n\t" + f"body参数：{json}" + "\n") if json else ""
         logger.info(f"[POST] {url}" + "\n" + f"请求头部信息：{headers}" + "\n" + f"请求报文：{params_str}{data_str}{json_str}")
         _, response = Request.request(
             "post",
@@ -304,9 +359,12 @@ class BaseAPI(object):
             files=file,
             verify=False,
             timeout=30,
+            expect_status_code=expect_status_code,
+            expect_errcode=expect_errcode,
+            expect_msg=expect_msg,
+            validate_type=validate_type,
         )
-        logger.info(f'接口返回信息：{response.content.decode("utf-8")}')
-        self.validate_response(response, expect_status_code, expect_errcode, expect_msg, validate_type)
+        logger.info(f"接口返回信息：{response}")
         return response
 
     def delete(
@@ -340,8 +398,8 @@ class BaseAPI(object):
         url = f"{self.domain}{uri}"
         headers = Request.get_headers(self.token, self.client_type, content_type)
         params_str = ("\n\t" + f"param参数：{params}" + "\n") if params else ""
-        data_str = ("\n\t" + f"data参数：{data}" + "\n") if params else ""
-        json_str = ("\n\t" + f"body参数：{json}" + "\n") if params else ""
+        data_str = ("\n\t" + f"data参数：{data}" + "\n") if data else ""
+        json_str = ("\n\t" + f"body参数：{json}" + "\n") if json else ""
         logger.info(f"[POST] {url}" + "\n" + f"请求头部信息：{headers}" + "\n" + f"请求报文：{params_str}{data_str}{json_str}")
         _, response = Request.request(
             "post",
@@ -353,37 +411,15 @@ class BaseAPI(object):
             files=file,
             verify=False,
             timeout=30,
+            expect_status_code=expect_status_code,
+            expect_errcode=expect_errcode,
+            expect_msg=expect_msg,
+            validate_type=validate_type,
         )
-        logger.info(f'接口返回信息：{response.content.decode("utf-8")}')
-        self.validate_response(response, expect_status_code, expect_errcode, expect_msg, validate_type)
+        logger.info(f"接口返回信息：{response}")
         return response
-
-    def validate_response(self, response, expect_status_code, expect_errcode, expect_msg, validate_type):
-        """
-        校验响应信息
-        :param response: 响应对象
-        :param expect_status_code: 预期接口返回状态码
-        :param expect_errcode: 预期接口返回错误码
-        :param expect_msg: 预期错误信息
-        :param validate_type: 错误信息校验类型 「equal | contains」
-        """
-        assert (
-            response.status_code == expect_status_code
-        ), f"接口响应状态码与预期不符：预期「{expect_status_code}」，实际状态码「{response.status_code}」"
-        if self.is_json:
-            resp_json = response.json()
-            assert (
-                resp_json["errcode"] == expect_errcode
-            ), f"接口报文错误码与预期不符：预期「{expect_errcode}」，实际「{resp_json['errcode']}」"
-            if expect_msg is not None and validate_type == "contains":
-                assert expect_msg in resp_json["errmsg"], f"接口报文错误信息与预期不符：预期「{expect_msg}」，实际「{resp_json['errmsg']}」"
-            elif expect_msg is not None and validate_type == "equal":
-                assert resp_json["errmsg"] == expect_msg, f"接口报文错误信息与预期不符：预期「{expect_msg}」，实际「{resp_json['errmsg']}」"
-            elif validate_type not in ("equal", "contains"):
-                raise ValueError("请传入正确的错误提示校验类型：equal｜contains")
 
 
 if __name__ == "__main__":
     c = BaseAPI("13510547953", "19850406")
-    c.post("1234", content_type=RequestContentType.JSON.name)
     print(c.album_id, c.token)

@@ -10,11 +10,10 @@
 
 import pymysql
 
-from common.support.yaml_parse import get_conn_mapping
-
+from common.settings import Settings
 
 class MySQLPool(object):
-    CONNECTION_MAP = get_conn_mapping("mysql")  # 加载数据库连接信息字典
+    CONNECTION_MAP = Settings.CONFIG.get("mysql", {})  # 加载数据库连接信息字典
     connection_cache = {}
 
     def __init__(self):

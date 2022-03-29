@@ -1,3 +1,14 @@
+normalUserInfo:
+  self:
+    username: "13510547953"
+    password: "19850406"
+  parent:
+    username: "13066884226"
+    password: wego2020
+  parent2:
+    username: "17169661596"
+    password: wego2020 
+
 mongodb:
   nhot:
     host: 10.0.1.18

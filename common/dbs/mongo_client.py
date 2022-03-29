@@ -11,13 +11,12 @@
 from urllib import parse
 
 import pymongo
-
-from common.support.yaml_parse import get_conn_mapping
+from common.settings import Settings
 
 
 class MongoPool(object):
 
-    CONNECTION_MAP = get_conn_mapping("mongodb")  # 加载数据库连接信息字典
+    CONNECTION_MAP = Settings.CONFIG.get("mongodb", {})  # 加载数据库连接信息字典
     SEARCH_MAP = {
         "0": "nzero",
         "1": "nnone",

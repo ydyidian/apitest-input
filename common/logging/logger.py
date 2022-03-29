@@ -32,14 +32,14 @@ LOG_STYLE_MAP = {
 
 class Logger(logging.Logger, metaclass=ForbidClassFieldMeta):  # 日志类
 
-    black_list = ('SWITCH_ON', 'LOGGER_FILE_NAME', 'ALLURE_FORMATTER', 'FORMATTER')
+    black_list = ("SWITCH_ON", "LOGGER_FILE_NAME", "ALLURE_FORMATTER", "FORMATTER")
 
     FORMATTER = logging.Formatter(
         "%(asctime)s | %(levelname)s | %(threadName)s | %(name)s | %(filename)s:%(lineno)d: %(message)s"
     )
     ALLURE_FORMATTER = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
     LOGGER_FILE_NAME = datetime.now().strftime("%Y%m%d%H%M%S.log")
-    SWITCH_ON = False
+    SWITCH_STATE = Settings.LOG_STATE
 
     def __init__(self, logger, log_level=logging.DEBUG):
         """
@@ -62,7 +62,7 @@ class Logger(logging.Logger, metaclass=ForbidClassFieldMeta):  # 日志类
         # 给logger添加handler
         self.addHandler(ch)
 
-        if self.SWITCH_ON:
+        if self.SWITCH_STATE == "2":
             # 创建一个handler，用于写入日志文件
             fh = logging.FileHandler(os.path.join(Settings.LOG_DIR, self.LOGGER_FILE_NAME), encoding="utf-8")
             fh.setLevel(logging.INFO)
@@ -93,7 +93,7 @@ class Logger(logging.Logger, metaclass=ForbidClassFieldMeta):  # 日志类
             elif not isinstance(exc_info, tuple):
                 exc_info = sys.exc_info()
         record = self.makeRecord(self.name, level, fn, lno, msg, args, exc_info, func, extra, sinfo)
-        if self.SWITCH_ON:
+        if self.SWITCH_STATE in ("1", "2"):
             self.handle(record)
         # 添加allure日志信息
         log_msg = self.ALLURE_FORMATTER.format(record)
