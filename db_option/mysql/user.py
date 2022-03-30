@@ -33,6 +33,12 @@ class User(object):
         self.login_pwd = "wego1234"
         self.is_vip = is_vip
         self.expire = expire or "9999-12-31"
+        self.gender = choice(("M", "F"))  # 性别「自定义字段，便于头像获取」
+        self.album_icon = (
+            "https://xcimg.szwego.com/20220330/a1648629490855_5871.jpg"
+            if self.gender == "M"
+            else "https://xcimg.szwego.com/20220330/a1648629441056_3418.jpg"
+        )
 
     def _gen_id(self, prefix: str = ""):
         """
@@ -222,9 +228,8 @@ class PropUtils(object):
                   "警", "攀", "蹲", "颤", "瓣", "爆", "疆", "壤", "耀", "躁", "嚼", "嚷", "籍", "魔", "灌", "蠢", "霸", "露", "囊", "罐",
                   "瑶",
                   ]
-
-    SECOND_NUMVERS = "35789"
-    WHITE_LIST = ("18938689504",)
+    # 限制号段 防止冲掉其他测试账号
+    SECOND_NUMVERS = "02345678"
 
     @classmethod
     def gen_rand_name(cls):
@@ -232,7 +237,8 @@ class PropUtils(object):
 
     @classmethod
     def gen_rand_tel_no(cls):
-        return f'1{choice(cls.SECOND_NUMVERS)}{"".join([choice(digits) for i in range(9)])}'
+        return f'19{choice(cls.SECOND_NUMVERS)}{"".join([choice(digits) for i in range(8)])}'
+
 
 
 class UserData(object):
@@ -263,8 +269,7 @@ class UserData(object):
             "`t_update_time`) VALUES ("
             "%s, "
             "%s, "
-            "'https://xcimg.szwego.com/"
-            "a58I6aqkZ1hGloLRMsPOnyCSwrbW6lvWKc3J60a7I81oNRicE68tyxdKFFzNs2DChIOMBJ3Ry83Zd7QZp5HCwvA', "
+            "%s, "
             "NULL, "
             "'亲们,关注我的微商相册?\n\n不仅第一时间查看上新动态?\n\n还能轻松一键转图朋友圈?', "
             "%s, "
@@ -282,7 +287,7 @@ class UserData(object):
             "CURRENT_TIMESTAMP, "
             "CURRENT_TIMESTAMP)"
         )
-        cls.conn.execute_many(album_info, [(u.album_id, u.album_name, u.album_code) for u in users])
+        cls.conn.execute_many(album_info, [(u.album_id, u.album_name, u.album_icon, u.album_code) for u in users])
 
     @classmethod
     def insert_user_album(cls, *users):
@@ -398,8 +403,7 @@ class UserData(object):
             "%s, "
             "%s, "
             "%s, "
-            "'https://xcimg.szwego.com/"
-            "a58I6aqkZ1hGloLRMsPOnyCSwrbW6lvWKc3J60a7I81oNRicE68tyxdKFFzNs2DChIOMBJ3Ry83Zd7QZp5HCwvA', "
+            "%s, "
             "'http://thirdwx.qlogo.cn/mmopen/vi_32/"
             "a58I6aqkZ1hGloLRMsPOnyCSwrbW6lvWKc3J60a7I81oNRicE68tyxdKFFzNs2DChIOMBJ3Ry83Zd7QZp5HCwvA/132', "
             "NULL, "
@@ -411,7 +415,10 @@ class UserData(object):
         )
         cls.conn.execute_many(
             user_info,
-            [(u.user_id, u.open_id, u.union_id, u.md5_union_id, u.album_name, u.tel_no, u.nick_name) for u in users],
+            [
+                (u.user_id, u.open_id, u.union_id, u.md5_union_id, u.album_name, u.tel_no, u.nick_name, u.album_icon)
+                for u in users
+            ],
         )
 
     @classmethod
