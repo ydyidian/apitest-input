@@ -8,8 +8,11 @@
 """
 
 import os
+import sys
 from _pytest.unittest import UnitTestCase
 
+# 添加项目路径到环境变量
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 def pytest_addoption(parser):
     parser.addoption(
