@@ -1,0 +1,33 @@
+boundary_validate:
+  - id: 关系ID为空
+    data: {"attendId": ""}
+    expect_errcode: 90001023
+    expect_msg: "关注关系ID为空"
+  - id: 关系ID不存在
+    data: {"attendId": "000001"}
+    expect_errcode: 90001023
+    expect_msg: "关注信息不存在"
+
+normal_validate:
+  - id: 取消关注[试用期用户]
+    data: 
+      pre:
+        user_num: 1
+        vip_infos: [{"is_vip": 2, "expire": "{% (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d') %}"}]
+      count: 1
+    expect_msg: "操作成功"
+  - id: 取消关注[试用期过期用户]
+    data: 
+      pre:
+        user_num: 1
+        vip_infos: [{"is_vip": 2, "expire": "{% (datetime.datetime.now()-datetime.timedelta(days=10)).strftime('%Y-%m-%d') %}"}]
+      count: 1
+    expect_msg: "操作成功"
+  - id: 取消关注[正式会员]
+    data: 
+      pre:
+        user_num: 1
+        vip_infos: [{"is_vip": 1}]
+      count: 1
+    expect_msg: "操作成功"
+    markers: [smoke]

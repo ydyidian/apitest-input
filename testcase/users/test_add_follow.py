@@ -30,12 +30,11 @@ class TestAddFollow(Assertion):
     def test_boundary_add_follow(self, inparam):
         self.verify_add_follow(inparam["data"], inparam.get("expect_errcode", 0), inparam.get("expect_msg", ""))
 
-    @pytest.mark.smoke
     @allure.title("添加关注-常用场景校验")
     @CreateUserData()
     @pytest.mark.parametrize("inparam", yp.assemble_case("normal_validate"))
     def test_add_follow(self, inparam):
-        for _ in range(inparam["data"]["count"]):
+        for i in range(inparam["data"]["count"]):
             self.verify_add_follow(
                 {"followAlbumId": inparam["users"][0].album_id},
                 inparam.get("expect_errcode", 0),
