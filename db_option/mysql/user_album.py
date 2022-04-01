@@ -24,7 +24,7 @@ class UserAlbum(object):
     @allure.step("获取用户相册信息")
     def get_user_album_infos(cls, *album_ids: str):
         """
-        获取粉丝关注信息
+        获取用户相册信息
         :param album_ids: 相册ID, 可以传入多个
         """
         sel_album_info = f"""
@@ -58,7 +58,7 @@ class UserAlbum(object):
     @allure.step("获取用户ID信息")
     def get_user_infos(cls, *album_ids: str):
         """
-        获取粉丝关注信息
+        获取用户ID信息
         :param album_ids: 相册ID, 可以传入多个
         """
         sel_user_id = f"""
