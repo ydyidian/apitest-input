@@ -1,0 +1,99 @@
+boundary_validate:
+  - id: 查询类型为空
+    data: {"queryType": ""}
+    expect_errcode: 1
+    expect_msg: "服务器偷懒！txId="
+  - id: 查询类型不是上家列表/粉丝列表类型
+    data: {"queryType": "3"}
+    expect_errcode: 90001002
+    expect_msg: "FollowInfoQueryType取值错误"
+  - id: 不传入查询类型
+    data: {"slipType": "1"}
+    expect_errcode: 1
+    expect_msg: "服务器偷懒！txId="
+
+
+normal_validate:
+  - id: 查询关注|粉丝列表[关注列表为空|粉丝列表为空]
+    pre:
+      user:
+        user_num: 1
+        vip_infos: [{"is_vip": 2, "expire": "{% (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d') %}"}]
+      upper_num: 0
+      fans_num: 0
+    data: 
+      follow: {"queryType": "1"}
+      fans: {"queryType": "2"}
+    expect_msg: "操作成功"
+    markers: [smoke]
+  - id: 查询关注|粉丝列表[关注列表不为空|粉丝列表为空]
+    pre:
+      user:
+        user_num: 5
+        vip_infos: [{"is_vip": 1},{"is_vip": 1},{"is_vip": 1},{"is_vip": 1},{"is_vip": 1}]
+      upper_num: 4
+      fans_num: 0
+    data: 
+      follow: {"queryType": "1"}
+      fans: {"queryType": "2"}
+    expect_msg: "操作成功"
+    markers: [smoke]
+  - id: 查询关注|粉丝列表[关注列表为空|粉丝列表不为空]
+    pre:
+      user:
+        user_num: 5
+        vip_infos: [{"is_vip": 1},{"is_vip": 1},{"is_vip": 1},{"is_vip": 1},{"is_vip": 1}]
+      upper_num: 4
+      fans_num: 0
+    data:
+      follow: {"queryType": "1"}
+      fans: {"queryType": "2"}
+    expect_msg: "操作成功"
+  - id: 查询关注|粉丝列表[关注粉丝不交叉]
+    pre:
+      user:
+        user_num: 10
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 5''') %}
+      upper_num: 4
+      fans_num: 5
+    data:
+      follow: {"queryType": "1"}
+      fans: {"queryType": "2"}
+    expect_msg: "操作成功"
+  - id: 查询关注|粉丝列表[关注粉丝交叉]
+    pre:
+      user:
+        user_num: 10
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 5''') %}
+      upper_num: 7
+      fans_num: 8
+    data:
+      follow: {"queryType": "1"}
+      fans: {"queryType": "2"}
+    expect_msg: "操作成功"
+    markers: [smoke]
+  - id: 查询关注|粉丝列表[下拉]
+    pre:
+      user:
+        user_num: 10
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 5''') %}
+      upper_num: 7
+      fans_num: 8
+    data:
+      follow: {"queryType": "1", "slipType": "0"}
+      fans: {"queryType": "2", "slipType": "0"}
+    expect_msg: "操作成功"
+  # 时间戳校验可以先忽略，现网上不会用到该字段
+  - id: 查询关注|粉丝列表[时间戳校验]
+    pre:
+      user:
+        user_num: 16
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 8''') %}
+      upper_num: 13
+      fans_num: 14
+      delay: 0.1
+    data:
+      follow: {"queryType": "1", "timestamp": {% int((datetime.datetime.now()-datetime.timedelta(microseconds=500)).timestamp() * 1000) %}}
+      fans: {"queryType": "2", "timestamp": {% int((datetime.datetime.now()-datetime.timedelta(microseconds=500)).timestamp() * 1000) %}}
+    expect_msg: "操作成功"
+
