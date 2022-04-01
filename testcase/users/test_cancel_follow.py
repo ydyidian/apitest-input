@@ -22,6 +22,7 @@ from route.input_script.uri import SriptUsersURI
 yp = YamlParser(FilePath.get_abspath_by_relation(__file__, "cancel_follow.yml"))
 
 
+@pytest.mark.user
 class TestCancelFollow(Assertion):
     @classmethod
     def setup_class(cls):
