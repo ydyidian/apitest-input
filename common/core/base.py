@@ -171,8 +171,8 @@ class BaseAPI(object):
                 Settings.CONFIG["normalUserInfo"][role]["username"],
                 Settings.CONFIG["normalUserInfo"][role]["password"],
             )
-        if client_type not in ("android", "ios", "net"):
-            raise ValueError("登录设备类型范围：android | ios | net ")
+        if client_type not in ("android", "ios", "net", "miniapp"):
+            raise ValueError("登录设备类型范围：android | ios | net | miniapp")
         self.client_type = client_type
         self.domain = domain
         if role == "anonymous":  # 游客
@@ -199,8 +199,9 @@ class BaseAPI(object):
         else:
             url = f"{self.domain}/album/api/v1/user/loginByCellphone"
             data = {"phone_number": username, "password": password, "ticket": ticket}
+            params = {"client_type": self.client_type}
             # is_json, resp = Request.request("post", url, json=data, verify=False)
-            is_json, resp = Request.request("post", url, json=data, verify=False)
+            is_json, resp = Request.request("post", url, params=params, json=data, verify=False)
             if is_json:
                 album_id = resp["result"]["albumId"]
                 token = resp["result"]["token"]
@@ -421,5 +422,5 @@ class BaseAPI(object):
 
 
 if __name__ == "__main__":
-    c = BaseAPI("13510547953", "19850406")
+    c = BaseAPI("13510547953", "19850406", client_type="miniapp")
     print(c.album_id, c.token)
