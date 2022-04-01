@@ -42,6 +42,7 @@ class TestAddFollow(Assertion):
                 inparam.get("expect_msg", ""),
             )
 
+    @allure.step("校验-添加关注")
     def verify_add_follow(self, data: dict, expect_errcode: int = 0, expect_msg: str = "操作成功"):
         self.base.get(
             SriptUsersURI.ADD_FOLLOW.value,

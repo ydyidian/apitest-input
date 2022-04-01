@@ -95,6 +95,7 @@ class TestFollowList(Assertion):
             Follower.del_follow_info(album_ids=[base_user.album_id], follow_album_ids=follows)
             Follower.del_follow_info(album_ids=fans, follow_album_ids=[base_user.album_id])
 
+    @allure.step("校验-查询关注/粉丝列表")
     def verify_follow_list(self, base, data: dict, expect_errcode: int = 0, expect_msg: str = "操作成功"):
         api_resp = base.post(
             SriptUsersURI.FOLLOW_LIST_QUERY.value,
@@ -113,6 +114,7 @@ class TestFollowList(Assertion):
             self.assertEqual(album_info, db_album_info)
             self.assertListEqual(data_list, db_data_list)
 
+    @allure.step("数据库-查询关注/粉丝列表")
     def get_db_follow_info(self, album_id, query_type: str, slip_type: str = "1", ts=None):
         """
         数据库中查询粉丝/关注信息

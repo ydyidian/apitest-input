@@ -48,6 +48,7 @@ class TestCancelFollow(Assertion):
         finally:
             UserManager.do_delete_user(*users)
 
+    @allure.step("校验-取消关注")
     def verify_cancel_follow(self, data: dict, expect_errcode: int = 0, expect_msg: str = "操作成功"):
         self.base.post(
             SriptUsersURI.CANCEL_FOLLOW.value,
