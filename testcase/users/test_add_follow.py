@@ -20,6 +20,7 @@ from route.input_script.uri import SriptUsersURI
 yp = YamlParser(FilePath.get_abspath_by_relation(__file__, "add_follow.yml"))
 
 
+@pytest.mark.user
 class TestAddFollow(Assertion):
     @classmethod
     def setup_class(cls):

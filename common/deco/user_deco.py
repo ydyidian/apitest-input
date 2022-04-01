@@ -48,12 +48,14 @@ class CreateUserData:
         """
         @wraps(func)
         def inner(*args, **kwargs):
-            if 'inparam' in kwargs:
-                pre_in = kwargs['inparam']['data']['pre']
+            if 'inparam' in kwargs and 'pre' in kwargs['inparam'] and 'user' in kwargs['inparam']['pre']:
+                pre_in = kwargs['inparam']['pre']['user']
+                assert 'user_num' in pre_in, "创建用户必须包含user_num字段！"
                 self.__user_num = pre_in['user_num']
                 self.__vip_infos = pre_in.get('vip_infos')
-            logger.info(f"用户数：{self.__user_num}，开始创建···")
+            logger.info(f"本次预计新增用户数：{self.__user_num}，开始创建···")
             users = UserManager.create_multi_users(self.__user_num, self.__vip_infos)
+            logger.info(f"✅ 新增用户数：{self.__user_num}")
             if 'inparam' in kwargs:
                 kwargs['inparam']['users'] = users
             res = None
@@ -62,6 +64,7 @@ class CreateUserData:
             finally:
                 logger.info('用户数据清理···')
                 UserManager.do_delete_user(*users)
+                logger.info('✅ 用户数据清理DONE！')
             return res
 
         return inner

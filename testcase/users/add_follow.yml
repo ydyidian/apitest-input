@@ -10,47 +10,47 @@ boundary_validate:
 
 normal_validate:
   - id: 首次关注[试用期]
+    pre:
+      user_num: 1
+      vip_infos: [{"is_vip": 2, "expire": "{% (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d') %}"}]
     data: 
-      pre:
-        user_num: 1
-        vip_infos: [{"is_vip": 2, "expire": "{% (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d') %}"}]
       count: 1
     expect_msg: "操作成功"
     markers: [smoke]
   - id: 首次关注[试用期过期用户]
+    pre:
+      user_num: 1
+      vip_infos: [{"is_vip": 2, "expire": "{% (datetime.datetime.now()-datetime.timedelta(days=10)).strftime('%Y-%m-%d') %}"}]
     data: 
-      pre:
-        user_num: 1
-        vip_infos: [{"is_vip": 2, "expire": "{% (datetime.datetime.now()-datetime.timedelta(days=10)).strftime('%Y-%m-%d') %}"}]
       count: 1
     expect_msg: "操作成功"
   - id: 首次关注[正式会员]
+    pre:
+      user_num: 1
+      vip_infos: [{"is_vip": 1}]
     data: 
-      pre:
-        user_num: 1
-        vip_infos: [{"is_vip": 1}]
       count: 1
     expect_msg: "操作成功"
     markers: [smoke]
   - id: 首次关注[正式会员过期]
+    pre:
+      user_num: 1
+      vip_infos: [{"is_vip": 1}]
     data: 
-      pre:
-        user_num: 1
-        vip_infos: [{"is_vip": 1}]
       count: 1
     expect_msg: "操作成功"
   - id: 再次关注[正式会员]
+    pre:
+      user_num: 1
+      vip_infos: [{"is_vip": 1}]
     data: 
-      pre:
-        user_num: 1
-        vip_infos: [{"is_vip": 1}]
       count: 2
     expect_msg: "操作成功"
   - id: 多次关注[正式会员]
+    pre:
+      user_num: 1
+      vip_infos: [{"is_vip": 1}] 
     data: 
-      pre:
-        user_num: 1
-        vip_infos: [{"is_vip": 1}] 
       count: 5
     expect_msg: "操作成功"
 
