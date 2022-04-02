@@ -1,0 +1,109 @@
+normal_validate:
+  - id: 查询关注/粉丝统计信息-无关注无粉丝[安卓客户端]
+    pre:
+      user:
+        user_num: 1
+        vip_infos: [{"is_vip": 2, "expire": "{% (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d') %}"}]
+      upper_num: 0
+      fans_num: 0
+    data: {"client_type": "android"}
+    expect_msg: "操作成功"
+    markers: [smoke]
+  - id: 查询关注/粉丝统计信息-只有关注[安卓客户端]
+    pre:
+      user:
+        user_num: 6
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 3''') %}
+      upper_num: 5
+      fans_num: 0
+    data: {"client_type": "android"}
+    expect_msg: "操作成功"
+  - id: 查询关注/粉丝统计信息-只有粉丝[安卓客户端]
+    pre:
+      user:
+        user_num: 6
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 3''') %}
+      upper_num: 0
+      fans_num: 5
+    data: {"client_type": "android"}
+    expect_msg: "操作成功"
+  - id: 查询关注/粉丝统计信息-只有粉丝|部分未读[安卓客户端]
+    pre:
+      user:
+        user_num: 6
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 3''') %}
+      upper_num: 0
+      fans_num: 5
+      read_num: 3
+    data: {"client_type": "android"}
+    expect_msg: "操作成功"
+  - id: 查询关注/粉丝统计信息-只有粉丝|全部已读[安卓客户端]
+    pre:
+      user:
+        user_num: 6
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 3''') %}
+      upper_num: 0
+      fans_num: 5
+      read_num: 5
+    data: {"client_type": "android"}
+    expect_msg: "操作成功"
+  - id: 查询关注/粉丝统计信息-粉丝&关注|全部未读[安卓客户端]
+    pre:
+      user:
+        user_num: 16
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 8''') %}
+      upper_num: 13
+      fans_num: 14
+    data: {"client_type": "android"}
+    expect_msg: "操作成功"
+  - id: 查询关注/粉丝统计信息-粉丝&关注|部分未读[安卓客户端]
+    pre:
+      user:
+        user_num: 6
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 3''') %}
+      upper_num: 5
+      fans_num: 5
+      read_num: 3
+    data: {"client_type": "android"}
+    expect_msg: "操作成功"
+    markers: [smoke]
+  - id: 查询关注/粉丝统计信息-粉丝&关注|全部已读[安卓客户端]
+    pre:
+      user:
+        user_num: 6
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 3''') %}
+      upper_num: 5
+      fans_num: 5
+      read_num: 5
+    data: {"client_type": "android"}
+    expect_msg: "操作成功"
+  - id: 查询关注/粉丝统计信息-粉丝&关注|全部未读[IOS客户端]
+    pre:
+      user:
+        user_num: 16
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 8''') %}
+      upper_num: 13
+      fans_num: 14
+    data: {"client_type": "ios"}
+    expect_msg: "操作成功"
+  - id: 查询关注/粉丝统计信息-粉丝&关注|部分未读[IOS客户端]
+    pre:
+      user:
+        user_num: 6
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 3''') %}
+      upper_num: 5
+      fans_num: 5
+      read_num: 3
+    data: {"client_type": "ios"}
+    expect_msg: "操作成功"
+    markers: [smoke]
+  - id: 查询关注/粉丝统计信息-粉丝&关注|全部已读[IOS客户端]
+    pre:
+      user:
+        user_num: 6
+        vip_infos: {% eval('''[{"is_vip": 1}, {"is_vip": 2, "expire": (datetime.datetime.now()+datetime.timedelta(days=10)).strftime('%Y-%m-%d')}] * 3''') %}
+      upper_num: 5
+      fans_num: 5
+      read_num: 5
+    data: {"client_type": "ios"}
+    expect_msg: "操作成功"
