@@ -15,7 +15,7 @@ from common.deco.user_deco import CreateUserData
 from common.path.filepath import FilePath
 from common.support.yaml_parse import YamlParser
 from db_option.mysql.script_follow import Follower
-from route.input_script.uri import SriptUsersURI
+from route.input_script.uri import ScriptUsersURI
 
 yp = YamlParser(FilePath.get_abspath_by_relation(__file__, "add_follow.yml"))
 
@@ -45,7 +45,7 @@ class TestAddFollow(Assertion):
     @allure.step("校验-添加关注")
     def verify_add_follow(self, data: dict, expect_errcode: int = 0, expect_msg: str = "操作成功"):
         self.base.get(
-            SriptUsersURI.ADD_FOLLOW.value,
+            ScriptUsersURI.ADD_FOLLOW.value,
             params=data,
             expect_errcode=expect_errcode,
             expect_msg=expect_msg,

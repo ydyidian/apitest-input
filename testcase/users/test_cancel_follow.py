@@ -17,7 +17,7 @@ from common.deco.user_deco import CreateUserData
 from common.path.filepath import FilePath
 from common.support.yaml_parse import YamlParser
 from db_option.mysql.script_follow import Follower
-from route.input_script.uri import SriptUsersURI
+from route.input_script.uri import ScriptUsersURI
 
 yp = YamlParser(FilePath.get_abspath_by_relation(__file__, "cancel_follow.yml"))
 
@@ -42,7 +42,7 @@ class TestCancelFollow(Assertion):
         try:
             uppers_album_id = users[0].album_id
             # 添加关注
-            self.base.get(SriptUsersURI.ADD_FOLLOW.value, params={"followAlbumId": uppers_album_id})
+            self.base.get(ScriptUsersURI.ADD_FOLLOW.value, params={"followAlbumId": uppers_album_id})
             _, infos = Follower.get_script_follower_info(album_id=self.base.album_id, follow_ids=[uppers_album_id])
             self.verify_cancel_follow({"attendId": infos[0][0]})
         finally:
@@ -51,7 +51,7 @@ class TestCancelFollow(Assertion):
     @allure.step("校验-取消关注")
     def verify_cancel_follow(self, data: dict, expect_errcode: int = 0, expect_msg: str = "操作成功"):
         self.base.post(
-            SriptUsersURI.CANCEL_FOLLOW.value,
+            ScriptUsersURI.CANCEL_FOLLOW.value,
             json=data,
             content_type=RequestContentType.JSON.value,
             expect_errcode=expect_errcode,

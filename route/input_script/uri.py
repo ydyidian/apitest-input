@@ -10,7 +10,7 @@
 from route.uri import URIEnum, WegoURI
 
 
-class SriptUsersURI(URIEnum):
+class ScriptUsersURI(URIEnum):
     USERNUM_QUERY = WegoURI("/script/api/v1/sriptConfig/queryConfig", desc="话术用户数查询")
     FOLLOW_LIST_QUERY = WegoURI("/script/api/v1/followInfo/queryFollowInfoList", desc="话术粉丝列表")
     CANCEL_FOLLOW = WegoURI("/script/api/v1/followInfo/cancelFollow", desc="取消关注/删除粉丝")

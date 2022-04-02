@@ -23,7 +23,7 @@ from common.support.yaml_parse import YamlParser
 from db_option.mysql.script_follow import Follower
 from db_option.mysql.script_statics import ScriptStatics
 from db_option.mysql.user_album import UserAlbum
-from route.input_script.uri import SriptUsersURI
+from route.input_script.uri import ScriptUsersURI
 
 logger = Logger(__name__)
 
@@ -63,7 +63,7 @@ class TestFollowList(Assertion):
             for user in users[1 : upper_num + 1]:
                 logger.info(f"[{base_user.album_id}]添加关注：{user.album_id}")
                 base.get(
-                    SriptUsersURI.ADD_FOLLOW.value,
+                    ScriptUsersURI.ADD_FOLLOW.value,
                     params={"followAlbumId": user.album_id},
                     expect_errcode=0,
                     expect_msg="操作成功",
@@ -78,7 +78,7 @@ class TestFollowList(Assertion):
                 fans_base = BaseAPI(user.tel_no, user.login_pwd)
                 logger.info(f"[{user.album_id}]添加关注：{base_user.album_id}")
                 fans_base.get(
-                    SriptUsersURI.ADD_FOLLOW.value,
+                    ScriptUsersURI.ADD_FOLLOW.value,
                     params={"followAlbumId": base_user.album_id},
                     expect_errcode=0,
                     expect_msg="操作成功",
@@ -98,7 +98,7 @@ class TestFollowList(Assertion):
     @allure.step("校验-查询关注/粉丝列表")
     def verify_follow_list(self, base, data: dict, expect_errcode: int = 0, expect_msg: str = "操作成功"):
         api_resp = base.post(
-            SriptUsersURI.FOLLOW_LIST_QUERY.value,
+            ScriptUsersURI.FOLLOW_LIST_QUERY.value,
             json=data,
             content_type=RequestContentType.JSON.value,
             expect_errcode=expect_errcode,
