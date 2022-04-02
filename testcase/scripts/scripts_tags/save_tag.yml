@@ -1,0 +1,13 @@
+boundary_validate:
+  - id: 标签内容为空
+    data: {"tagName": ""}
+    expect_errcode: 90001021
+    expect_msg: "关注的相册ID为空"
+  - id: 标签内容为超长
+    data: {"tagName": "一二三四五六七八九"}
+    expect_errcode: 90001021
+    expect_msg: "关注的相册ID为空"
+  - id: 编辑非本人商品
+    data: {"tagId": "100","tagName": "非本人商品"}
+    expect_errcode: 90001021
+    expect_msg: "关注的相册ID为空"
