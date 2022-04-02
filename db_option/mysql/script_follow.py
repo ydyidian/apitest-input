@@ -83,10 +83,41 @@ class Follower(object):
     @classmethod
     @allure.step("删除关注信息")
     def del_follow_info(cls, *, n_ids: List = None, album_ids: List = None, follow_album_ids: List = None):
+        """
+        删除关注信息
+        :param n_ids: 主键ID, 默认值: None
+        :param album_ids: 相册ID列表, 默认值: None
+        :param follow_album_ids: 关注相册ID列表, 默认值: None
+        :return: 删除数
+        """
         if not n_ids and not album_ids and not follow_album_ids:
             raise ValueError("三个参数必填其一「防止删表」！")
         del_follow_inf = f"""
             delete from tb_script_follow_info
+            where 1 = 1
+                {f'and n_id in ({cls.pool.convert_sql_in_cond(n_ids)})' if n_ids else ''}
+                {f'and c_album_id in ({cls.pool.convert_sql_in_cond(album_ids or [])})' if not n_ids else ''}
+                {f'and c_follow_album_id in ({cls.pool.convert_sql_in_cond(follow_album_ids or [])})'
+                if not n_ids else ''}
+        """
+        logger.info(f"删除粉丝关注信息SQL: \n{del_follow_inf}")
+        return cls.pool.execute(del_follow_inf)
+
+    @classmethod
+    @allure.step("更新关注信息")
+    def update_follow_info(
+        cls, update_str, *, n_ids: List = None, album_ids: List = None, follow_album_ids: List = None
+    ):
+        """
+        更新关注信息
+        :param update_str: 更新字段
+        :param n_ids: 主键ID, 默认值: None
+        :param album_ids: 相册ID, 默认值: None
+        :param follow_album_ids: 关注相册ID, 默认值: None
+        :return: 更新数
+        """
+        del_follow_inf = f"""
+            update tb_script_follow_info set {update_str}
             where 1 = 1
                 {f'and n_id in ({cls.pool.convert_sql_in_cond(n_ids)})' if n_ids else ''}
                 {f'and c_album_id in ({cls.pool.convert_sql_in_cond(album_ids or [])})' if not n_ids else ''}
