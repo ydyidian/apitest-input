@@ -31,6 +31,7 @@ class TestScriptStatics(Assertion):
     # def setup_class(cls):
     #     cls.base = BaseAPI(role="self")
 
+    @allure.title("话术用户粉丝/关注数统计信息查询")
     @CreateUserData()
     @pytest.mark.parametrize("inparam", yp.assemble_case("normal_validate"))
     def test_query_script_statics(self, inparam):

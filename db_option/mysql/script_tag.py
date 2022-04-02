@@ -3,10 +3,9 @@
 """
 @Author: yiciu
 @Version: 1.0
-@Date: 2022/03/31 16:58
+@Date: 2022/04/02 17:32
 @Desc:
 """
-
 
 import allure
 
@@ -21,10 +20,10 @@ class ScriptStatics(object):
     pool = MySQLPool()
 
     @classmethod
-    @allure.step("获取粉丝关注信息")
+    @allure.step("获取话术标签信息")
     def get_user_statics(cls, *album_ids: str):
         """
-        获取粉丝关注信息
+        获取话术标签信息
         :param album_ids: 相册ID, 默认值: None
         """
         sel_statics_info = f"""
@@ -38,3 +37,7 @@ class ScriptStatics(object):
         logger.info(f"用户统计信息SQL: \n{sel_statics_info}")
         _, statics = cls.pool.query(sel_statics_info)
         return {i[0]: i for i in statics}
+
+
+
+
