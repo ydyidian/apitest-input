@@ -16,6 +16,9 @@ from common.path.filepath import FilePath
 from common.support.yaml_parse import YamlParser
 from db_option.mysql.script_follow import Follower
 from route.input_script.uri import ScriptUsersURI
+from common.logging.logger import Logger
+
+logger = Logger(__name__)
 
 yp = YamlParser(FilePath.get_abspath_by_relation(__file__, "add_follow.yml"))
 
@@ -35,12 +38,17 @@ class TestAddFollow(Assertion):
     @CreateUserData()
     @pytest.mark.parametrize("inparam", yp.assemble_case("normal_validate"))
     def test_add_follow(self, inparam):
-        for i in range(inparam["data"]["count"]):
-            self.verify_add_follow(
-                {"followAlbumId": inparam["users"][0].album_id},
-                inparam.get("expect_errcode", 0),
-                inparam.get("expect_msg", ""),
-            )
+        follow_album_ids = []
+        try:
+            for i in range(inparam["data"]["count"]):
+                album_id = inparam["users"][0].album_id
+                follow_album_ids.append(album_id)
+                self.verify_add_follow(
+                    {"followAlbumId": album_id}, inparam.get("expect_errcode", 0), inparam.get("expect_msg", "")
+                )
+        finally:
+            logger.info(f"清理关注数据：当前用户[{self.base.album_id}], 粉丝[{'|'.join(follow_album_ids)}]")
+            Follower.del_follow_info(album_ids=[self.base.album_id], follow_album_ids=follow_album_ids)
 
     @allure.step("校验-添加关注")
     def verify_add_follow(self, data: dict, expect_errcode: int = 0, expect_msg: str = "操作成功"):
