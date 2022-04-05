@@ -14,6 +14,7 @@ from _pytest.unittest import UnitTestCase
 # 添加项目路径到环境变量
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
+
 def pytest_addoption(parser):
     parser.addoption(
         "--env",
@@ -42,9 +43,19 @@ def pytest_collection(session):
     session.config.args = [item.encode("unicode-escape").decode("utf8") for item in session.config.args]
     os.environ["auto_env"] = session.config.option.env
     os.environ["log_state"] = session.config.option.log_state
+    os.environ["allure_dir"] = session.config.option.allure_report_dir or ''
 
 
 def pytest_itemcollected(item):
     if not isinstance(item.parent, UnitTestCase):
         item.name = item.name.encode("utf8").decode("unicode-escape")
         item._nodeid = item._nodeid.encode("utf8").decode("unicode-escape")
+
+
+def pytest_sessionfinish(session, exitstatus):
+    from common.settings import Settings
+
+    allure_dir = session.config.option.allure_report_dir
+    if allure_dir:
+        with open(os.path.join(Settings.BASE_DIR, allure_dir, "environment.properties"), "w", encoding="utf8") as f:
+            f.write("\n".join((f"autoEnv={os.environ.get('auto_env')}", f"baseUrl={Settings.DOMAIN}")))
