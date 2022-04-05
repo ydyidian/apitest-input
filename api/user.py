@@ -8,6 +8,7 @@
 """
 
 
+import allure
 from typing import List
 from db_option.mysql.user import User, UserData
 from common.logging.logger import Logger
@@ -17,6 +18,7 @@ logger = Logger(__name__)
 
 class UserManager(object):
     @classmethod
+    @allure.step("创建单个用户数据")
     def create_single_user(cls, is_vip: int = 1, expire: str = "9999-12-31"):
         """
         创建单个用户
@@ -30,6 +32,7 @@ class UserManager(object):
         return user
 
     @classmethod
+    @allure.step("批量创建用户数据")
     def create_multi_users(cls, user_num: int, vip_infos: List[dict] = None):
         """
         批量创建用户
