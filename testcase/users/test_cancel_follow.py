@@ -57,5 +57,6 @@ class TestCancelFollow(Assertion):
             expect_errcode=expect_errcode,
             expect_msg=expect_msg,
         )
-        num, _ = Follower.get_script_follower_info(n_id=[data["attendId"]])
-        self.assertEqual(num, 0)
+        if expect_errcode == 0:
+            num, _ = Follower.get_script_follower_info(n_id=data["attendId"])
+            self.assertEqual(num, 0)
