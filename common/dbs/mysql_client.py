@@ -12,6 +12,7 @@ import pymysql
 
 from common.settings import Settings
 
+
 class MySQLPool(object):
     CONNECTION_MAP = Settings.CONFIG.get("mysql", {})  # 加载数据库连接信息字典
     connection_cache = {}
@@ -33,7 +34,7 @@ class MySQLPool(object):
             conn_inf["password"],
             conn_inf["database"],
         )
-        k = f'{host}^{port}^{user}^{password}'
+        k = f"{host}^{port}^{user}^{password}"
         if k in MySQLPool.connection_cache:
             conn = MySQLPool.connection_cache[k]
         else:
@@ -43,7 +44,7 @@ class MySQLPool(object):
         self.conn = conn
         return conn.cursor()
 
-    def execute_many(self, sql, args, dbname='wg_tongs_test'):
+    def execute_many(self, sql, args, dbname="wg_tongs_test"):
         """
         执行多条sql
         :param sql: sql语句
@@ -56,7 +57,7 @@ class MySQLPool(object):
         self.conn.commit()
         return rows
 
-    def execute(self, sql, args=None, dbname='wg_tongs_test'):
+    def execute(self, sql, args=None, dbname="wg_tongs_test"):
         """
         执行sql
         :param sql: sql语句
@@ -69,7 +70,7 @@ class MySQLPool(object):
         self.conn.commit()
         return rows
 
-    def query(self, sql, args=None, dbname='wg_tongs_test'):
+    def query(self, sql, args=None, dbname="wg_tongs_test"):
         """
         查询mysql
         :param sql: sql语句
@@ -84,7 +85,7 @@ class MySQLPool(object):
         fetchs = cursor.fetchall()
         return rows, fetchs
 
-    def fetch_one_row(self, sql, args=None, dbname='wg_tongs_test'):
+    def fetch_one_row(self, sql, args=None, dbname="wg_tongs_test"):
         """
         查询单条记录
         :param sql: sql语句
@@ -97,7 +98,7 @@ class MySQLPool(object):
         self.conn.commit()
         return cursor.fetchone()
 
-    def fetch_one_field(self, sql, args=None, default=None, dbname='wg_tongs_test'):
+    def fetch_one_field(self, sql, args=None, default=None, dbname="wg_tongs_test"):
         """
         查询单个字段
         :param sql: sql语句
@@ -123,6 +124,18 @@ class MySQLPool(object):
             if is_dual
             else (f"{quoter}" + f"{quoter}, {quoter}".join([str(item) for item in iter_obj]) + f"{quoter}")
         )
+
+    def strip_multi_line_sql(self, *squence):
+        """
+        去除空行
+        :return: 去掉空行sql
+        e.g. squence: ('select', 'name', '', 'from table', 'where name="233"')
+        =>  select
+            name
+            from table
+            where name="233"
+        """
+        return "\n".join(i for i in squence if i)
 
 
 if __name__ == "__main__":

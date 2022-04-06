@@ -47,7 +47,7 @@ import yaml
 from yaml.parser import ParserError
 
 
-expression_pattern = "{%(?P<pre>\s)?(?P<expression>.+)(?(pre)\s)%}"
+expression_pattern = "{%(?P<pre>\s)?(?P<expression>.+?)(?(pre)\s)%}"
 variable_pattern = "{{(?P<pre>\s)?(?P<variable>\w+(\.\w+)*)(?(pre)\s)}}"
 
 
