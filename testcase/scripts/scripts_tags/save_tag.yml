@@ -2,12 +2,53 @@ boundary_validate:
   - id: 标签内容为空
     data: {"tagName": ""}
     expect_errcode: 90001021
-    expect_msg: "关注的相册ID为空"
-  - id: 标签内容为超长
-    data: {"tagName": "一二三四五六七八九"}
-    expect_errcode: 90001021
-    expect_msg: "关注的相册ID为空"
+    expect_msg: 关注的相册ID为空
+    markers: [smoke]
+    bug_url: https://www.tapd.cn/30833735/bugtrace/bugs/view?bug_id=1130833735001028449}
+  - id: 标签内容为超长[数据库最大长度64]
+    data: {"tagName": {% eval('"一二三四五" * 13') %}}
+    expect_errcode: 1
+    expect_msg: 服务器偷懒！txId=
   - id: 编辑非本人商品
-    data: {"tagId": "100","tagName": "非本人商品"}
-    expect_errcode: 90001021
-    expect_msg: "关注的相册ID为空"
+    data: {"tagId": 2,"tagName": "非本人商品"}
+    expect_errcode: 90002002
+    expect_msg: 该标签不存在
+
+
+edit_validate:
+  - id: 创建标签[常规字符]
+    data: 
+      data: {"tagName": "常规字符保存{% random.randint(1, 10000) %}"}
+  - id: 创建标签[表情字符]
+    data: 
+      data: {"tagName": "表情1⃣️2⃣️🌂{% random.randint(1, 10000) %}"}
+  - id: 创建标签[创建同名标签]
+    data: 
+      send_cnt: 3
+      data: {"tagName": "常规字符保存{% random.randint(1, 10000) %}"}
+  - id: 编辑标签[常规字符]
+    data: 
+      data: {"tagName": "常规字符保存{% random.randint(1, 10000) %}"}
+      udpate: {"tagName": "常规字符保存{% random.randint(10000, 99999) %}"}
+  - id: 编辑标签[表情字符]
+    data: 
+      data: {"tagName": "表情1⃣️2⃣️🌂{% random.randint(1, 10000) %}"}
+      udpate: {"tagName": "表情1⃣️2⃣️🌂{% random.randint(10000, 99999) %}"}
+  - id: 编辑标签[编辑同名标签]
+    data: 
+      send_cnt: 3
+      data: {"tagName": "常规字符保存y{% random.randint(1, 10000) %}"}
+
+
+mix_validate:
+  - id: 编辑标签[修改标签1为标签2的名称｜同名校验]
+    data: 
+      data: [{"tagName": "标签x{% random.randint(1, 10000) %}"}, {"tagName": "标签x{% random.randint(10000, 99999) %}"}]
+    expect_errcode: 90002001
+    expect_msg: 已有该名称的标签
+
+mix2_validate:
+  - id: 编辑标签[标签已删除]
+    data: {"tagName": "御标签{% random.randint(1, 10000) %}"}
+    expect_errcode: 90002002
+    expect_msg: 该标签不存在
