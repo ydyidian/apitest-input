@@ -9,7 +9,6 @@
 
 
 from collections import OrderedDict
-from operator import index
 import time
 
 import allure
@@ -43,7 +42,7 @@ class TestFollowList(Assertion):
             self.base, inparam["data"], inparam.get("expect_errcode", 0), inparam.get("expect_msg", "")
         )
 
-    @allure.title("添加关注-常用场景校验")
+    @allure.title("查询关注-常用场景校验")
     @CreateUserData()
     @pytest.mark.parametrize("inparam", yp.assemble_case("normal_validate"))
     def test_query_follow_list(self, inparam):

@@ -1,14 +1,17 @@
 # coding=utf8
 
-"""
-@Author: yiciu
-@Version: 1.0
-@Date: 2022/03/25 17:33
-@Desc:  1、将获取头部信息提取到Request类中作为静态方法获取
-        2、支持request的session请求以及返回json
-        3、BaseAPI中支持游客模式（不登录）
-        4、设置登录缓存变量，当用户调用登录时，根据用户名@密码去缓存中获取对应token，如果没有获取到，则先登录，然后缓存，以便后续使用
-"""
+# ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+#
+# @Author: yiciu
+# @Version: 1.1
+# @Date: 2022/04/07 19:34 | 周四
+# @Desc: 1、将获取头部信息提取到Request类中作为静态方法获取
+#        2、支持request的session请求以及返回json
+#        3、BaseAPI中支持游客模式（不登录）
+#        4、设置登录缓存变量，当用户调用登录时，根据用户名@密码去缓存中获取对应token，如果没有获取到，则先登录，然后缓存，以便后续使用
+#        5、修改log输出样式
+#
+# ＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
 
 
 import json
@@ -242,10 +245,7 @@ class BaseAPI(object):
         """
         url = f"{self.domain}{uri}"
         headers = Request.get_headers(self.token, self.client_type, content_type)
-        params_str = ("\n\t" + f"param参数：{params}" + "\n") if params else ""
-        data_str = ("\n\t" + f"data参数：{data}" + "\n") if data else ""
-        json_str = ("\n\t" + f"body参数：{json}" + "\n") if json else ""
-        logger.info(f"[POST] {url}" + "\n" + f"请求头部信息：{headers}" + "\n" + f"请求报文：{params_str}{data_str}{json_str}")
+        logger.info(self._assemble_msg("GET", url, headers, params, data, json), desc="GET接口请求")
         _, response = Request.request(
             "get",
             url,
@@ -261,7 +261,7 @@ class BaseAPI(object):
             expect_msg=expect_msg,
             validate_type=validate_type,
         )
-        logger.info(f"接口返回信息：{response}")
+        logger.info(("接口返回信息：", response))
         return response
 
     def post(
@@ -294,10 +294,7 @@ class BaseAPI(object):
         """
         url = f"{self.domain}{uri}"
         headers = Request.get_headers(self.token, self.client_type, content_type)
-        params_str = ("\n\t" + f"param参数：{params}" + "\n") if params else ""
-        data_str = ("\n\t" + f"data参数：{data}" + "\n") if data else ""
-        json_str = ("\n\t" + f"body参数：{json}" + "\n") if json else ""
-        logger.info(f"[POST] {url}" + "\n" + f"请求头部信息：{headers}" + "\n" + f"请求报文：{params_str}{data_str}{json_str}")
+        logger.info(self._assemble_msg("POST", url, headers, params, data, json), desc="POST接口请求")
         _, response = Request.request(
             "post",
             url,
@@ -313,7 +310,7 @@ class BaseAPI(object):
             expect_msg=expect_msg,
             validate_type=validate_type,
         )
-        logger.info(f"接口返回信息：{response}")
+        logger.info(("接口返回信息：", response))
         return response
 
     def put(
@@ -346,10 +343,7 @@ class BaseAPI(object):
         """
         url = f"{self.domain}{uri}"
         headers = Request.get_headers(self.token, self.client_type, content_type)
-        params_str = ("\n\t" + f"param参数：{params}" + "\n") if params else ""
-        data_str = ("\n\t" + f"data参数：{data}" + "\n") if data else ""
-        json_str = ("\n\t" + f"body参数：{json}" + "\n") if json else ""
-        logger.info(f"[POST] {url}" + "\n" + f"请求头部信息：{headers}" + "\n" + f"请求报文：{params_str}{data_str}{json_str}")
+        logger.info(self._assemble_msg("PUT", url, headers, params, data, json), desc="PUT接口请求")
         _, response = Request.request(
             "post",
             url,
@@ -365,7 +359,7 @@ class BaseAPI(object):
             expect_msg=expect_msg,
             validate_type=validate_type,
         )
-        logger.info(f"接口返回信息：{response}")
+        logger.info(("接口返回信息：", response))
         return response
 
     def delete(
@@ -398,10 +392,7 @@ class BaseAPI(object):
         """
         url = f"{self.domain}{uri}"
         headers = Request.get_headers(self.token, self.client_type, content_type)
-        params_str = ("\n\t" + f"param参数：{params}" + "\n") if params else ""
-        data_str = ("\n\t" + f"data参数：{data}" + "\n") if data else ""
-        json_str = ("\n\t" + f"body参数：{json}" + "\n") if json else ""
-        logger.info(f"[POST] {url}" + "\n" + f"请求头部信息：{headers}" + "\n" + f"请求报文：{params_str}{data_str}{json_str}")
+        logger.info(self._assemble_msg("DELETE", url, headers, params, data, json), desc="DELETE接口请求")
         _, response = Request.request(
             "post",
             url,
@@ -417,8 +408,28 @@ class BaseAPI(object):
             expect_msg=expect_msg,
             validate_type=validate_type,
         )
-        logger.info(f"接口返回信息：{response}")
+        logger.info(("接口返回信息：", response))
         return response
+
+    def _assemble_msg(self, method, url, headers, params, data, json):
+        """
+        组装请求响应日志内容
+        :param method: 请求方式
+        :param url: 请求地址
+        :param headers: 头部信息
+        :param params: query参数
+        :param data: data参数
+        :param json: json参数
+        :return: 信息列表
+        """
+        messages = [f"[{method.upper()}] {url}", "请求头部信息：", f"{headers}", "\n请求报文："]
+        if params:
+            messages.extend(("\n  param参数：", params, "\n"))
+        if data:
+            messages.extend(("\n  data参数：", data, "\n"))
+        if json:
+            messages.extend(("\n  body参数：", json, "\n"))
+        return messages
 
 
 if __name__ == "__main__":
