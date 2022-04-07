@@ -39,12 +39,12 @@ class TestAddScriptTag(Assertion):
             for item in self.del_inf:
                 ScriptTag.del_script_tag_info(*item)
 
-    @allure.step("保存标签-边界校验")
+    @allure.title("保存标签-边界校验")
     @pytest.mark.parametrize("inparam", yp.assemble_case("boundary_validate"))
     def test_save_tag_boundary(self, inparam):
         self.verify_save_tag(self.base, inparam["data"], inparam["expect_errcode"], inparam["expect_msg"])
 
-    @allure.step("保存标签-新增/编辑校验")
+    @allure.title("保存标签-新增/编辑校验")
     @pytest.mark.parametrize("inparam", yp.assemble_case("edit_validate"))
     def test_save_tag_edit(self, inparam):
         send_cnt = inparam["data"].get("send_cnt", 1)
@@ -58,7 +58,7 @@ class TestAddScriptTag(Assertion):
         for _ in range(send_cnt):
             self.verify_save_tag(self.base, data)
 
-    @allure.step("保存标签-标签覆盖校验")
+    @allure.title("保存标签-标签覆盖校验")
     @pytest.mark.parametrize("inparam", yp.assemble_case("mix_validate"))
     def test_save_tag_mix(self, inparam):
         data_lst = inparam["data"]["data"]
@@ -73,7 +73,7 @@ class TestAddScriptTag(Assertion):
         data = {"tagId": api_resp["result"]["tagId"], "tagName": api_resp2["result"]["tagName"]}
         self.verify_save_tag(self.base, data, inparam["expect_errcode"], inparam["expect_msg"])
 
-    @allure.step("保存标签-修改已删除校验")
+    @allure.title("保存标签-修改已删除校验")
     @pytest.mark.parametrize("inparam", yp.assemble_case("mix2_validate"))
     def test_save_tag_mix2(self, inparam):
         data = inparam["data"]
