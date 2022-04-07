@@ -29,6 +29,8 @@ logger = Logger(__name__)
 yp = YamlParser(FilePath.get_abspath_by_relation(__file__, "follow_list.yml"))
 
 
+@allure.epic("用户")
+@allure.feature("查询关注列表")
 @pytest.mark.user
 class TestFollowList(Assertion):
     @classmethod

@@ -22,6 +22,8 @@ from route.input_script.uri import ScriptUsersURI
 yp = YamlParser(FilePath.get_abspath_by_relation(__file__, "cancel_follow.yml"))
 
 
+@allure.epic("用户")
+@allure.feature("取消关注")
 @pytest.mark.user
 class TestCancelFollow(Assertion):
     @classmethod

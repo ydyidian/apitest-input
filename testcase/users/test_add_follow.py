@@ -23,6 +23,8 @@ logger = Logger(__name__)
 yp = YamlParser(FilePath.get_abspath_by_relation(__file__, "add_follow.yml"))
 
 
+@allure.epic("用户")
+@allure.feature("添加关注")
 @pytest.mark.user
 class TestAddFollow(Assertion):
     @classmethod

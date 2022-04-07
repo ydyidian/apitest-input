@@ -25,6 +25,8 @@ logger = Logger(__name__)
 yp = YamlParser(FilePath.get_abspath_by_relation(__file__, "script_statics.yml"))
 
 
+@allure.epic("用户")
+@allure.feature("查询关注/粉丝统计")
 @pytest.mark.user
 class TestScriptStatics(Assertion):
     # @classmethod
