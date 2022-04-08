@@ -98,7 +98,7 @@ class YamlParser(object):
                 if module_name not in local_modules:
                     locals()[module_name] = __import__(module_name)
                     local_modules.add(module_name)
-            return str(eval(expression))
+            return str(eval(expression, locals()))
 
         # 填充变量
         if "{{" in fs and "}}" in fs:
