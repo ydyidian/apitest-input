@@ -1,0 +1,30 @@
+boundary_validate:
+  - id: tagId必填校验
+    data: {"deleteType": "1"}
+    expect_errcode: 90001021
+    expect_msg: tagId不能为空
+  - id: tagId不存在
+    data: {"deleteType": "1", "tagId": -133}
+    expect_errcode: 90001021
+    expect_msg: tagId不存在
+  - id: tagId非本人
+    data: {"deleteType": "1", "tagId": 2}
+    expect_errcode: 90001021
+    expect_msg: tagId不存在
+
+
+normal_validate:
+  - id: 删除标签[常规字符]
+    data: 
+      pre: {"tagName": "常规字符{% random.randint(1, 10000) %}"}
+      data: '{"deleteType": "1", "tagId": "%s"}'
+  - id: 删除标签[表情字符]
+    data: 
+      pre: {"tagName": "表情字符{% random.randint(1, 10000) %}"}
+      data: '{"deleteType": "1", "tagId": "%s"}'
+  - id: 删除标签[删除已删除标签]
+    data: 
+      pre: {"tagName": "表情字符{% random.randint(1, 10000) %}"}
+      data: '{"deleteType": "1", "tagId": "%s"}'
+      del_count: 3
+
