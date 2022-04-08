@@ -93,8 +93,8 @@ class YamlParser(object):
         def fill_expression(match):
             expression = match.group("expression")
             local_modules = set()
-            for i in re.findall("(\w+)(\.\w+)+\(", expression):
-                module_name = i[0]
+            for i in re.findall("((\w+)(\.\w+)+\()|((\w+)\.\w+)", expression):
+                module_name = i[1] or i[4]
                 if module_name not in local_modules:
                     locals()[module_name] = __import__(module_name)
                     local_modules.add(module_name)
