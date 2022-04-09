@@ -1,10 +1,10 @@
 boundary_validate:
   - id: 标签内容为空
     data: {"tagName": ""}
-    expect_errcode: 90001021
-    expect_msg: 关注的相册ID为空
+    expect_errcode: 1
+    expect_msg: 标签名称不能为空
     markers: [smoke]
-    bug_url: https://www.tapd.cn/30833735/bugtrace/bugs/view?bug_id=1130833735001028449}
+    bug_url: https://www.tapd.cn/30833735/bugtrace/bugs/view?bug_id=1130833735001028449
   - id: 标签内容为超长[数据库最大长度64]
     data: {"tagName": {% eval('"一二三四五" * 13') %}}
     expect_errcode: 1

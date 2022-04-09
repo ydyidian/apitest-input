@@ -4,9 +4,10 @@ boundary_validate:
     expect_errcode: 90001021
     expect_msg: "关注的相册ID为空"
   - id: 相册ID不存在
-    data: {"followAlbumId": "A00000"}
-    expect_errcode: 90001021
-    expect_msg: "关注的相册ID为空"
+    data: {"followAlbumId": "A000001111"}
+    expect_errcode: 90001018
+    expect_msg: "相册信息不存在"
+    bug_url: https://www.tapd.cn/30833735/bugtrace/bugs/view/1130833735001028204
 
 normal_validate:
   - id: 首次关注[试用期]
