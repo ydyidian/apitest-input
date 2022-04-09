@@ -12,7 +12,7 @@ pipeline {
     parameters {
         choice name: "auto_env", choices: ['test_3d', 'test_2', 'test_3', 'test_3a', 'test_3b', 'test_3c', 'test_1'], description: "运行环境"
         choice name: "mix_type", choices: ['and', 'or'], description: "案例是否交集「and交集｜or并集」"
-        extendedChoice name: 'markers', description: '标签集合', multiSelectDelimiter: ',', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_CHECKBOX', value: 'user,smoke', visibleItemCount: 5
+        extendedChoice name: 'markers', description: '标签集合', multiSelectDelimiter: ',', quoteValue: false, saveJSONParameterToFile: false, type: 'PT_CHECKBOX', value: 'smoke,user,script', visibleItemCount: 5
     }
     environment {
         markers = ""
