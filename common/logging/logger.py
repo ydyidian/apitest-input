@@ -135,7 +135,18 @@ class Logger(logging.Logger, metaclass=ForbidClassFieldMeta):  # 日志类
                 exc_info = (type(exc_info), exc_info, exc_info.__traceback__)
             elif not isinstance(exc_info, tuple):
                 exc_info = sys.exc_info()
-        record = self.makeRecord(self.name, level, fn, lno, msg, args, exc_info, func, extra, sinfo)
+        record = self.makeRecord(
+            self.name,
+            level,
+            fn,
+            lno,
+            f"{self.__desc}\n{msg}" if self.__desc else msg,
+            args,
+            exc_info,
+            func,
+            extra,
+            sinfo,
+        )
         if self.SWITCH_STATE in ("1", "2"):
             self.handle(record)
         # 添加allure日志信息
@@ -159,12 +170,10 @@ class Logger(logging.Logger, metaclass=ForbidClassFieldMeta):  # 日志类
             assert isinstance(eval_str, dict), "字符串不是JSON格式或Python字典格式！"
             msg = (
                 '<br><div style="background-color: #f8f8f9; line-height: 1.3em; font-family:monospace,Courier New; '
-                'padding: 5px;margin: 5px 0;border-radius: 10px;">'
-                + self._prettify_html_json(eval_str)
-                + "</div>"
+                'padding: 5px;margin: 5px 0;border-radius: 10px;">' + self._prettify_html_json(eval_str) + "</div>"
             )
         finally:
-            return msg.replace("\n", "<br>").replace("\s", "&nbsp;").replace('\t', "&nbsp;" * 4)
+            return msg.replace("\n", "<br>").replace("\s", "&nbsp;").replace("\t", "&nbsp;" * 4)
 
     def _prettify_html_json(self, dic_obj, deepths=1):
         return (
