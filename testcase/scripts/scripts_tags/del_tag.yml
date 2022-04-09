@@ -1,16 +1,17 @@
 boundary_validate:
   - id: tagId必填校验
     data: {"deleteType": "1"}
-    expect_errcode: 90001021
-    expect_msg: tagId不能为空
+    expect_errcode: 1
+    expect_msg: 标签id为空
+    bug_url: https://www.tapd.cn/30833735/bugtrace/bugs/view/1130833735001028547
   - id: tagId不存在
     data: {"deleteType": "1", "tagId": -133}
-    expect_errcode: 90001021
-    expect_msg: tagId不存在
+    expect_errcode: 1
+    expect_msg: 删除失败
   - id: tagId非本人
     data: {"deleteType": "1", "tagId": 2}
-    expect_errcode: 90001021
-    expect_msg: tagId不存在
+    expect_errcode: 1
+    expect_msg: 删除失败
 
 
 normal_validate:

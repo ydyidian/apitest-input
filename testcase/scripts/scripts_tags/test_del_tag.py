@@ -64,7 +64,8 @@ class TestDelScriptTag(Assertion):
             expect_errcode=expect_errcode,
             expect_msg=expect_msg,
         )
-        tag_id = data["tagId"]
-        num, infos = ScriptTag.get_script_tag_info(self.base.album_id, id_=tag_id, status=-1)
-        logger.info(f"数据库查询结果：{infos}")
-        self.assertIn(num, (0, 1))
+        tag_id = data.get("tagId")
+        if tag_id:
+            num, infos = ScriptTag.get_script_tag_info(self.base.album_id, id_=tag_id, status=-1)
+            logger.info(f"数据库查询结果：{infos}")
+            self.assertIn(num, (0, 1))
