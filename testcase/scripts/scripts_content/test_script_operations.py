@@ -60,30 +60,30 @@ class TestScriptOpterations(Assertion):
                     self.es_client.delete(index=ElasticIndex.SCRIPT_INFO.value, id=i["_id"])
             self.scs = []  # 重置
 
-    @allure.title("标签操作-边界校验")
+    @allure.title("话术操作-边界校验")
     @pytest.mark.parametrize("inparam", yp.assemble_case("boundary_validate"))
-    def test_tag_operation_boundary(self, inparam):
-        self.verify_tag_operation(self.base, inparam["data"], inparam["expect_errcode"], inparam["expect_msg"])
+    def test_script_operation_boundary(self, inparam):
+        self.verify_script_operation(self.base, inparam["data"], inparam["expect_errcode"], inparam["expect_msg"])
 
-    @allure.title("标签操作-新增场景校验")
+    @allure.title("话术操作-新增场景校验")
     @pytest.mark.parametrize("inparam", yp.assemble_case("add_validate"))
-    def test_tag_operation_add(self, inparam):
-        self.verify_tag_operation(self.base, inparam["data"])
+    def test_script_operation_add(self, inparam):
+        self.verify_script_operation(self.base, inparam["data"])
 
-    @allure.title("标签操作-修改场景校验")
+    @allure.title("话术操作-修改场景校验")
     @pytest.mark.parametrize("inparam", yp.assemble_case("modify_validate"))
-    def test_tag_operation_modify(self, inparam):
+    def test_script_operation_modify(self, inparam):
         api_resp = self.base.post(
             ScriptInfoURI.SCRIPT_OPERATION.value,
             json=inparam["data"]["pre"],
             content_type=RequestContentType.JSON.value,
         )
         script_id = api_resp["result"]["scriptId"]
-        self.verify_tag_operation(self.base, eval(inparam["data"]["data"] % script_id))
+        self.verify_script_operation(self.base, eval(inparam["data"]["data"] % script_id))
 
-    @allure.title("标签操作-转存场景校验")
+    @allure.title("话术操作-转存场景校验")
     @pytest.mark.parametrize("inparam", yp.assemble_case("share_validate"))
-    def test_tag_operation_share(self, inparam):
+    def test_script_operation_share(self, inparam):
         api_resp = self.base_upper.post(
             ScriptInfoURI.SCRIPT_OPERATION.value,
             json=inparam["data"]["pre"],
@@ -91,21 +91,21 @@ class TestScriptOpterations(Assertion):
         )
         script_id = api_resp["result"]["scriptId"]
         self.scs.append((self.base_upper.album_id, script_id))
-        self.verify_tag_operation(self.base, eval(inparam["data"]["data"] % (self.base_upper.album_id, script_id)))
+        self.verify_script_operation(self.base, eval(inparam["data"]["data"] % (self.base_upper.album_id, script_id)))
 
-    @allure.title("标签操作-删除场景校验")
+    @allure.title("话术操作-删除场景校验")
     @pytest.mark.parametrize("inparam", yp.assemble_case("del_validate"))
-    def test_tag_operation_del(self, inparam):
+    def test_script_operation_del(self, inparam):
         api_resp = self.base.post(
             ScriptInfoURI.SCRIPT_OPERATION.value,
             json=inparam["data"]["pre"],
             content_type=RequestContentType.JSON.value,
         )
         script_id = api_resp["result"]["scriptId"]
-        self.verify_tag_operation(self.base, eval(inparam["data"]["data"] % script_id))
+        self.verify_script_operation(self.base, eval(inparam["data"]["data"] % script_id))
 
     @allure.step("校验-话术内容操作[增删改|转存]")
-    def verify_tag_operation(self, base, data: dict, expect_errcode: int = 0, expect_msg: str = "操作成功"):
+    def verify_script_operation(self, base, data: dict, expect_errcode: int = 0, expect_msg: str = "操作成功"):
         api_resp = base.post(
             ScriptInfoURI.SCRIPT_OPERATION.value,
             json=data,
