@@ -273,7 +273,8 @@ mysql:
     database: wg_commodity_sharding_009
 
 es:
-  host: 10.1.20.3
-  port: 9200
-  user: aaa
-  password: aaa
+  normal:
+    host: 10.1.20.3
+    port: 9200
+    user: aaa
+    password: aaa

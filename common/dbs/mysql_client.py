@@ -158,14 +158,14 @@ class Model(object):
         :param query_res: 查询结果列表
         :return: 对象/对象列表「如果是一维的直接返回对象，如果是二维的返回对象列表」
         """
-        assert isinstance(query_res, (list, tuple))
+        assert isinstance(query_res, (list, tuple)) and len(query_res), "传入查询结果需要是非空的列表/元组！"
         model_name, fields = cls.__get_table_fields(query_sql_str)
         model_class_ = namedtuple(model_name, fields)
-        return (
-            [model_class_(**dict(zip(fields, item))) for item in query_res]
-            if isinstance(query_res[0], (list, tuple))
-            else model_class_(**dict(zip(fields, query_res)))
-        )
+        if isinstance(query_res[0], (list, tuple)):
+            assert len(query_res[0]), "传入查询结果需要是非空的列表/元组！"
+            return [model_class_(**dict(zip(fields, item))) for item in query_res]
+        else:
+            return model_class_(**dict(zip(fields, query_res)))
 
     @classmethod
     def __get_table_fields(cls, query_sql_str):

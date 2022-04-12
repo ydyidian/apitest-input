@@ -34,6 +34,7 @@ class ScriptTag(object):
         order: str = None,
         start_row: int = None,
         num: int = None,
+        search_mode='match'
     ):
         """
         获取话术标签信息
@@ -47,6 +48,12 @@ class ScriptTag(object):
         :param num: 查询数量, 默认值: None
         :return:
         """
+        name_filter = ''
+        if name:
+            if search_mode == 'match':
+                name_filter = f"  and c_name like '%{name}%'"
+            else:
+                name_filter = f"  and c_name='{name}'"
         sel_script_tag_info = cls.pool.strip_multi_line_sql(
             "select",
             "    n_id,",
@@ -60,7 +67,7 @@ class ScriptTag(object):
             "from tb_script_tag",
             f"where c_album_id = '{album_id}'",
             f"  and n_id = '{id_}'" if id_ else "",
-            f"  and c_name like '%{name}%'" if name else "",
+            f"{name_filter}",
             f"  and n_status = '{status}'" if status is not None else "",
             f"order by {order_by} {order}" if order else "",
             f"limit {start_row},{num}" if start_row and num else ("limit {num}" if num else ""),
