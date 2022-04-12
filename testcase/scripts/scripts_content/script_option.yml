@@ -1,0 +1,148 @@
+boundary_validate:
+  - id: 标签内容为空[新增话术]
+    data: {"operateType": "1"}
+    expect_errcode: 90001010
+    expect_msg: 为空话术
+  - id: 标签内容为空字符[新增话术]
+    data: {"operateType": "1", "scriptValue": ""}
+    expect_errcode: 90001010
+    expect_msg: 为空话术
+  - id: 标签内容为空格[新增话术]
+    data: {"operateType": "1", "scriptValue": "   "}
+    expect_errcode: 90001010
+    expect_msg: 为空话术
+  - id: 标签内容超长500[新增话术]
+    data: {"operateType": "1", "scriptValue": {% eval("'一二三四五' * 100 + '一'") %}}
+    expect_errcode: 90001025
+    expect_msg: 空话术长度超长
+  - id: 不传入标签ID[修改话术]
+    data: {"operateType": "2", "scriptValue": "修改标签"}
+    expect_errcode: 90001009
+    expect_msg: 话术ID为空
+  - id: 标签ID为空字符[修改话术]
+    data: {"operateType": "2", "scriptId": ""}
+    expect_errcode: 90001009
+    expect_msg: 话术ID为空
+  - id: 标签ID不存在[修改话术]
+    data: {"operateType": "2", "scriptId": "-10001010", "scriptValue": "标签ID不存在"}
+    expect_errcode: 90001012
+    expect_msg: 话术不存在
+  - id: 标签ID非本人[修改话术]
+    data: {"operateType": "2", "scriptId": "202204071418235590001825", "scriptValue": "标签ID非本人"}
+    expect_errcode: 90001013
+    expect_msg: 不是自己的话术
+    markers: [smoke]
+  - id: 不传入标签ID[删除话术]
+    data: {"operateType": "4", "scriptValue": "删除标签"}
+    expect_errcode: 90001009
+    expect_msg: 话术ID为空
+  - id: 标签ID为空字符[删除话术]
+    data: {"operateType": "4", "scriptId": ""}
+    expect_errcode: 90001009
+    expect_msg: 话术ID为空
+  - id: 标签ID不存在[删除话术]
+    data: {"operateType": "4", "scriptId": "-10001010", "scriptValue": "标签ID不存在"}
+    expect_errcode: 90001012
+    expect_msg: 话术不存在
+  - id: 标签ID非本人[删除话术]
+    data: {"operateType": "4", "scriptId": "202204071418235590001825", "scriptValue": "标签ID非本人"}
+    expect_errcode: 90001013
+    expect_msg: 不是自己的话术
+    markers: [smoke]
+  - id: 不传入上家相册ID[转存话术]
+    data: {"operateType": "3", "scriptValue": "上家相册ID"}
+    expect_errcode: 90001017
+    expect_msg: 父话术相册ID为空
+  - id: 不传入上家话术ID[转存话术]
+    data: {"operateType": "3", "scriptValue": "上家相册ID", "parentAlbumId": "A123"}
+    expect_errcode: 90001016
+    expect_msg: 父话术ID为空
+
+
+add_validate:
+  - id: 新增话术[只有话术内容]
+    data: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+  - id: 新增话术[私密话术]
+    data: {"operateType": "1", "openStatus": 1, "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+  - id: 新增话术[只有话术内容|包含表情字符]
+    data: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}1⃣️2⃣️🌂😄🧦时尚"}
+  - id: 新增话术[话术内容最大长度保存]
+    data: {"operateType": "1", "scriptValue": {% eval("'一二三四五' * 100") %}}
+    markers: [smoke]
+  - id: 新增话术[话术内容&图片]
+    data: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}", "imageUrl": "https://xcimg.szwego.com/20220411/a1649669048666_1805.jpg"}
+  - id: 新增话术[话术内容&标签]
+    data: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}", "tags": [{"isSelected": true,"tagId": -1,"tagName": "新增标签"}]}
+  - id: 新增话术[话术内容&多标签]
+    data: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}", "tags": [{"isSelected": true,"tagId": -1,"tagName": "新增标签"}, {"isSelected": true,"tagId": -1,"tagName": "新增标签{% random.randint(1, 100) %}"}]}
+  - id: 新增话术[话术内容&图片&标签]
+    data: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}", "imageUrl": "https://xcimg.szwego.com/20220411/a1649669048666_1805.jpg", "tags": [{"isSelected": true,"tagId": -1,"tagName": "新增标签"}]}
+
+
+modify_validate:
+  - id: 修改话术[只修改话术内容]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+      data: '{"operateType": "2", "scriptValue": "修改话术{% random.randint(1, 1000) %}", "scriptId": "%s"}'
+  - id: 修改话术[修改为隐藏]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+      data: '{"operateType": "2", "openStatus": 1, "scriptValue": "修改话术{% random.randint(1, 1000) %}", "scriptId": "%s"}'
+  - id: 修改话术[只修改话术内容|包含表情字符]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+      data: '{"operateType": "2", "scriptValue": "话术1⃣️2⃣️🌂{% random.randint(1, 1000) %}", "scriptId": "%s"}'
+  - id: 修改话术[话术内容最大长度保存]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+      data: '{"operateType": "2", "scriptValue": "{% eval(""""一二三四五" * 100""") %}", "scriptId": "%s"}'
+  - id: 修改话术[话术内容&图片]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+      data: '{"operateType": "2", "scriptId": "%s", "scriptValue": "修改话术{% random.randint(1, 1000) %}", "imageUrl": "https://xcimg.szwego.com/20220411/a1649669048666_1805.jpg"}'
+  - id: 修改话术[话术内容&标签]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+      data: '{"operateType": "2", "scriptId": "%s", "scriptValue": "新增话术{% random.randint(1, 1000) %}", "tags": [{"isSelected": True,"tagId": -1,"tagName": "新增标签"}]}'
+  - id: 修改话术[话术内容&图片&标签]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+      data: '{"operateType": "2", "scriptId": "%s", "scriptValue": "新增话术{% random.randint(1, 1000) %}", "imageUrl": "https://xcimg.szwego.com/20220411/a1649669048666_1805.jpg", "tags": [{"isSelected": True,"tagId": -1,"tagName": "新增标签"}]}'
+    markers: [smoke]
+
+
+share_validate:
+  - id: 转存话术[只有话术内容|修改]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+      data: '{"operateType": "3", "scriptValue": "转存话术{% random.randint(1, 1000) %}", "parentScriptId": "%s", "parentAlbumId": "%s"}'
+  - id: 转存话术[只有话术内容|不修改]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术233"}
+      data: '{"operateType": "3", "scriptValue": "新增话术233", "parentScriptId": "%s", "parentAlbumId": "%s"}'
+  - id: 转存话术[话术内容最大长度保存]
+    data: 
+      pre: {"operateType": "1", "scriptValue": {% eval("'一二三四五' * 100") %}}
+      data: '{"operateType": "3", "scriptValue": "{% eval(""""一二三四五" * 100""") %}", "parentScriptId": "%s", "parentAlbumId": "%s"}'
+  - id: 转存话术[话术内容&图片&标签]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}", "imageUrl": "https://xcimg.szwego.com/20220411/a1649669048666_1805.jpg", "tags": [{"isSelected": true,"tagId": -1,"tagName": "新增标签"}]}
+      data: '{"operateType": "3", "parentScriptId": "%s", "parentAlbumId": "%s", "scriptValue": "新增话术{% random.randint(1, 1000) %}", "imageUrl": "https://xcimg.szwego.com/20220411/a1649669048666_1805.jpg", "tags": [{"tagId": -1,"tagName": "新增标签"}]}'
+    markers: [smoke]
+      
+
+del_validate:
+  - id: 删除话术[只修改话术内容]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}"}
+      data: '{"operateType": "4", "scriptId": "%s"}'
+  - id: 删除话术[话术内容最大长度保存]
+    data: 
+      pre: {"operateType": "1", "scriptValue": {% eval("'一二三四五' * 100") %}}
+      data: '{"operateType": "4", "scriptId": "%s"}'
+  - id: 删除话术[话术内容&图片&标签]
+    data: 
+      pre: {"operateType": "1", "scriptValue": "新增话术{% random.randint(1, 1000) %}", "imageUrl": "https://xcimg.szwego.com/20220411/a1649669048666_1805.jpg", "tags": [{"tagId": -1,"tagName": "新增标签"}]}
+      data: '{"operateType": "4", "scriptId": "%s"}'
+    markers: [smoke]
+
