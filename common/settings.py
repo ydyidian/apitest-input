@@ -34,3 +34,7 @@ class Settings(object, metaclass=ForbidClassFieldMeta):
     LOG_STATE = os.environ.get("log_state", "0")
     DOMAIN = ENV_MAP.get(ENV_SERIAL)
     CONFIG = get_yaml_data(FilePath.get_abspath_by_relation(__file__, f"../config/test_{ENV_SERIAL[0]}_config.yml"))
+
+
+if __name__ == '__main__':
+    s = Settings()

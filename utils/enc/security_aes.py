@@ -55,9 +55,11 @@ def generate_token(key, value) -> str:
 
 if __name__ == "__main__":
     # 测试3环境数据.
-    result = generate_token("6O3u7B7nB0xT36Up", "%s_%s_%s" % ("U201903281423219250092305", "20200911143550", "ios"))
-    expected_result = (
-        "QTQzODc4MDE2NjI0Q0Q0QzY0MTUxMURGREIwMDEwRDUxNTc0REMzQkZEOTE2NENCNUY5QjIxREU4RTUwREUyQTk0MTBC"
-        "Njk3RTBCMzY0RDlGMTkzMkZDMzYyRDRERUQ0"
-    )
-    print(result == expected_result)
+    # result = generate_token("6O3u7B7nB0xT36Up", "%s_%s_%s" % ("U201903281423219250092305", "20200911143550", "ios"))
+    # expected_result = (
+    #     "QTQzODc4MDE2NjI0Q0Q0QzY0MTUxMURGREIwMDEwRDUxNTc0REMzQkZEOTE2NENCNUY5QjIxREU4RTUwREUyQTk0MTBC"
+    #     "Njk3RTBCMzY0RDlGMTkzMkZDMzYyRDRERUQ0"
+    # )
+    # print(result == expected_result)
+    t=get_sha1prng_key("test1@163.com")
+    get_sha1prng_key(t)

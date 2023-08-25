@@ -6,6 +6,7 @@
 @Date: 2022/03/28 14:32
 @Desc:
 """
+import os
 
 import allure
 import pytest
@@ -62,3 +63,9 @@ class TestAddFollow(Assertion):
         )
         num, _ = Follower.get_script_follower_info(album_id=self.base.album_id, follow_ids=[data["followAlbumId"]])
         self.assertEqual(num, 1 if expect_errcode == 0 else 0)
+
+
+if __name__ == '__main__':
+    pytest.main(["-vs","test_add_follow"])
+    # pytest.main(['--alluredir', r'D:\project/apitest-input/report'])
+    # os.system('allure generate ./testcase -o D:\project/apitest-input//report --clean')
